@@ -36,6 +36,11 @@ origins = [
     "http://localhost:8000",
     "*"
 ]
+@app.get('/')
+def docsa_bak():
+    
+    return dict(HasanGurbuz='Url karistirma docstan kontrol et karşim')
+
 
 app.add_middleware(
     #hangi domainlerden istek gideceğini soran ve hepsine izin veren mekanizma
