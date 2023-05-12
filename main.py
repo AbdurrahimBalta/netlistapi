@@ -61,7 +61,7 @@ def get_health():
 @app.post("/object-to-json")
 async def detect_component_return_json_result(file: bytes = File(...)):
     input_image = get_image_from_bytes(file)
-    results = model(input_image)
+    results = model(input_image.copy())
     detect_res = results.pandas().xyxy[0].to_json(orient="records")  # JSON img1 predictions
     detect_res = json.loads(detect_res)
     return {"result": detect_res}
@@ -70,7 +70,7 @@ async def detect_component_return_json_result(file: bytes = File(...)):
 @app.post("/object-to-img")
 async def detect_component_return_base64_img(file: bytes = File(...)):
     input_image = get_image_from_bytes(file)
-    results = model(input_image)
+    results = model(input_image.copy())
     results.render()  # updates results.imgs with boxes and labels
     for img in results.ims:
         bytes_io = io.BytesIO()
@@ -82,7 +82,7 @@ async def detect_component_return_base64_img(file: bytes = File(...)):
 @app.post("/object-to-netlist")
 async def detect_component_netlist(file: bytes = File(...)):
     input_image = get_image_from_bytes(file)
-    results = model(input_image)
+    results = model(input_image.copy())
     threshold = 80
     min_line_length = 0
     max_line_gap = 0
@@ -106,7 +106,8 @@ async def detect_component_netlist(file: bytes = File(...)):
 
         font = cv2.FONT_HERSHEY_SCRIPT_SIMPLEX
         img = cv2.rectangle(img, top_left, bottom_right, (255, 255, 255), -1)
-        texts.append({"text": text, "coordinate": (top_left, bottom_right)})
+        text_dict = {"text": text, "coordinate": (top_left, bottom_right)}
+        texts.append(text_dict)
     #img = cv2.putText(img,text,top_left,4,.6,(55,55,55),1,cv2.LINE_AA)
 
 
