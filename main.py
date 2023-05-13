@@ -162,7 +162,7 @@ async def detect_component_netlist(file: bytes = File(...)):
     circuit = nf.Circuit(components, nodes, texts)
 
 
-    plot_curcuit = circuit.drawCircuit(org_img)
+    #plot_curcuit = circuit.drawCircuit(org_img)
     
     x = circuit.generateNetlist()
   
