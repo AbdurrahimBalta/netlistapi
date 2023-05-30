@@ -12,6 +12,7 @@ from collections import defaultdict
 from statistics import mean
 import easyocr
 import rectangleFunction as rf
+import json
 
 
 classes = ["AC_Source", "BJT", "Battery", "Capacitor", "Current_Source", "DC_Source", "Dep_Current_Source", "Dep_DC_Source",
@@ -193,15 +194,32 @@ class Circuit:
 
 #            self.componentList[index].toString()
             self.componentList[index].value = text['text']
-
+    """
     def generateNetlist(self):
         text = ""
         for component in self.componentList:
             row = f"{classes[component.classNo]}{component.cmp_id} {component.connection1} {component.connection2} {component.value}"
             print(row)
-            text += row+"\n"
+            text += row+ "\n"
         return text
-            
+    """
+
+    import json
+
+    def generateNetlist(self):
+        netlist = []
+        for component in self.componentList:
+            row = {
+            "class": classes[component.classNo],
+            "cmp_id": component.cmp_id,
+            "connection1": component.connection1,
+            "connection2": component.connection2,
+            "value": component.value
+            }
+            netlist.append(row)
+        return json.dumps(netlist)
+
+    
 
     def setComponentConnections(self):
 
