@@ -202,24 +202,7 @@ class Circuit:
             print(row)
             text += row+ "\n"
         return text
-    
-
-    import json
-    """
-    def generateNetlist(self):
-        netlist = []
-        for component in self.componentList:
-            row = {
-            "class": classes[component.classNo],
-            "cmp_id": component.cmp_id,
-            "connection1": component.connection1,
-            "connection2": component.connection2,
-            "value": component.value
-            }
-            netlist.append(row)
-        return json.dumps(netlist)
-    """
-    
+       
 
     def setComponentConnections(self):
 
