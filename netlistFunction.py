@@ -194,7 +194,7 @@ class Circuit:
 
 #            self.componentList[index].toString()
             self.componentList[index].value = text['text']
-    """
+    
     def generateNetlist(self):
         text = ""
         for component in self.componentList:
@@ -202,10 +202,10 @@ class Circuit:
             print(row)
             text += row+ "\n"
         return text
-    """
+    
 
     import json
-
+    """
     def generateNetlist(self):
         netlist = []
         for component in self.componentList:
@@ -218,7 +218,7 @@ class Circuit:
             }
             netlist.append(row)
         return json.dumps(netlist)
-
+    """
     
 
     def setComponentConnections(self):
