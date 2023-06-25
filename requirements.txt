@@ -72,3 +72,5 @@ watchgod==0.7
     # via uvicorn
 websockets==10.0
     # via uvicorn
+
+PySpice==1.5
