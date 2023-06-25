@@ -79,11 +79,32 @@ async def detect_component_return_base64_img(file: bytes = File(...)):
     return Response(content=bytes_io.getvalue(), media_type="image/jpeg")
 
 
+from pydantic import BaseModel
+
+
+class PostData(BaseModel):
+    text: str
+    string: str
+
+@app.post("/denemedata")
+async def create_post(data: PostData):
+    text = data.text
+    string = data.string
+
+    # Burada post verilerini kullanarak yapılacak işlemleri gerçekleştirin
+    # Örneğin, veritabanına kaydetmek veya başka bir API'ye göndermek
+
+    return {"message": "Post request received", "text": text, "string": string}
+
+
+
+
+
 @app.post("/object-to-netlist")
 async def detect_component_netlist(file: bytes = File(...)):
     input_image = get_image_from_bytes(file)
     results = model(input_image.copy())
-    threshold = 80
+    threshold = 60
     min_line_length = 0
     max_line_gap = 0
 
