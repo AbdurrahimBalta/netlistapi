@@ -1,7 +1,13 @@
 from PySpice.Spice.Netlist import Circuit
 from PySpice.Unit import u_Ω, u_V
 import matplotlib.pyplot as plt
+import  PySpice.Logging.Logging as Logging
+logger = Logging.setup_logging()
+from PySpice.Spice.Netlist import Circuit
+from PySpice.Unit import *
 
+import numpy as np
+import matplotlib.pyplot as plt
 
 def generate_circuit(netlist, voltage_value):
     
@@ -23,7 +29,7 @@ def generate_circuit(netlist, voltage_value):
             value = eval(value)  # Converts the value to a unit object
             circuit.R(last_number, node1, node2, value)
 
-        elif line.startswith('Voltage_Source'):
+        elif line.startswith('Voltage_Source') or line.startswith('DC_Source'):
             elements = line.split()
             name, node1, node2, value = elements[0], elements[1], elements[2], elements[3]
             number = ''.join(filter(str.isdigit, name))
@@ -33,6 +39,18 @@ def generate_circuit(netlist, voltage_value):
 
             value = eval(value)  # Converts the value to a unit object
             circuit.V(last_number, node1, node2, value)
+        elif line.startswith('Capacitor'):
+            elements = line.split()
+            name, node1, node2, value = elements[0], elements[1], elements[2], elements[3]
+            number = ''.join(filter(str.isdigit, name))
+            last_number = number.split("pF")[0]
+        
+        
+            value = value[:-2]+ "@u_uF"
+        
+            value = eval(value)  # Converts the value to a unit object            
+            circuit.C(last_number, node1, node2, value)
+    print(circuit)
 
     simulator = circuit.simulator(temperature=25, nominal_temperature=25)
     analysis = simulator.operating_point()

@@ -2,9 +2,8 @@ from fastapi import FastAPI, File
 from segmentation import get_yolov5, get_image_from_bytes
 from starlette.responses import Response
 from dc import generate_circuit
-
+from Ac_analysis import ac_analysis
 import io
-from PIL import Image
 import json
 from fastapi.middleware.cors import CORSMiddleware
 import ssl
@@ -23,7 +22,8 @@ import easyocr
 import rectangleFunction as rf
 import netlistFunction as nf
 from pydantic import BaseModel
-
+import matplotlib.pyplot as plt
+from PIL import Image
 
 model = get_yolov5()
 
@@ -103,12 +103,25 @@ async def create_post(data: PostData):
 class CircuitRequest(BaseModel):
     netlist: str
     voltage_value: str
+    
 
 @app.post("/dc_analysis")
 def generate_circuit_endpoint(request: CircuitRequest):
     return generate_circuit(request.netlist, request.voltage_value)
 
+#*******************************************************************************
 
+class AC_request(BaseModel):
+    netlist: str
+    start_freq: str
+    stop_freq: str
+
+@app.post("/ac_analysis")
+def generate_circuit_endpoint(request: AC_request):
+    
+    image_bytes = ac_analysis(request.netlist, request.start_freq, request.stop_freq)
+    
+    return Response(content=image_bytes.getvalue(), media_type="image/jpeg")
 
 
 
@@ -195,8 +208,9 @@ async def detect_component_netlist(file: bytes = File(...)):
     circuit = nf.Circuit(components, nodes, texts)
 
 
-    #plot_curcuit = circuit.drawCircuit(org_img)
-    
+    plot_curcuit = circuit.drawCircuit(org_img)
+   
+
     x = circuit.generateNetlist()
   
     

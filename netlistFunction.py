@@ -432,5 +432,4 @@ class Circuit:
             img = cv2.putText(img, f"{self.nodeRevisedList[node.nodeID]}", (
                 x-15, y-3), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0))
 
-        # cv2.imwrite('last.jpg',img)
-        
+        return img        
