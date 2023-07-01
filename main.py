@@ -3,6 +3,7 @@ from segmentation import get_yolov5, get_image_from_bytes
 from starlette.responses import Response
 from dc import generate_circuit
 from Ac_analysis import ac_analysis
+from transient import transient_analysis
 import io
 import json
 from fastapi.middleware.cors import CORSMiddleware
@@ -122,6 +123,22 @@ def generate_circuit_endpoint(request: AC_request):
     image_bytes = ac_analysis(request.netlist, request.start_freq, request.stop_freq)
     
     return Response(content=image_bytes.getvalue(), media_type="image/jpeg")
+
+#************************************
+
+class Transient_request(BaseModel):
+    netlist: str
+    step_time: str
+    stop_time: str
+
+@app.post("/transient_analysis")
+def transient_compenent_analysis(request: Transient_request):
+    
+    image_bytes = transient_analysis(request.netlist, request.step_time, request.stop_time)
+    
+    return Response(content=image_bytes.getvalue(), media_type="image/jpeg")
+
+
 
 
 
