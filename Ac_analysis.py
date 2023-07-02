@@ -13,10 +13,7 @@ import matplotlib.pyplot as plt
 
 
 
-
-
-
-def ac_analysis(netlist = str ,start_frequency = str,stop_frequency= str):
+def ac_analysis(netlist = str ,start_frequency = str,stop_frequency= str, voltage= str, freq = str):
 
     start_f = start_frequency + "@u_Hz"
     start_f = eval(start_f)
@@ -24,8 +21,15 @@ def ac_analysis(netlist = str ,start_frequency = str,stop_frequency= str):
     stop_f = stop_frequency + "@u_MHz"
     stop_f = eval(stop_f)
     
+    voltage_value = voltage + "@u_V"
+    voltage_value = eval(voltage_value)
+    
+    freq_value = freq + "@u_kHz"
+    freq_value = eval(freq_value)
+    
+    
     circuit = Circuit('AC Analizi')
-    circuit.SinusoidalVoltageSource('input', 'in', circuit.gnd, amplitude=1@u_V, frequency=1@u_kHz)
+    circuit.SinusoidalVoltageSource('input', 'in', circuit.gnd, amplitude=voltage_value, frequency=freq_value)
     circuit.R(1, 'in', 'n1', 1@u_kOhm)
     circuit.R(2, 'n1', 'out', 1@u_kOhm)
     circuit.C(1, 'out', circuit.gnd, 2.3@u_uF)

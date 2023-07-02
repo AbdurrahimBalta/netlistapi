@@ -116,11 +116,14 @@ class AC_request(BaseModel):
     netlist: str
     start_freq: str
     stop_freq: str
+    voltage: str
+    freq: str
+    
 
 @app.post("/ac_analysis")
 def generate_circuit_endpoint(request: AC_request):
     
-    image_bytes = ac_analysis(request.netlist, request.start_freq, request.stop_freq)
+    image_bytes = ac_analysis(request.netlist, request.start_freq, request.stop_freq,request.voltage,request.freq)
     
     return Response(content=image_bytes.getvalue(), media_type="image/jpeg")
 
